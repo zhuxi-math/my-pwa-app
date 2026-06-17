@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#FF9500">
   <meta name="description" content="小学生作业计划及完成打卡">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="/my-pwa-app/manifest.json">
   <title>作业打卡</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -278,7 +278,7 @@
   <!-- Service Worker 注册 -->
   <script>
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-      navigator.serviceWorker.register('sw.js').catch(function() {});
+      navigator.serviceWorker.register('/my-pwa-app/sw.js').catch(function() {});
     }
   </script>
 </body>

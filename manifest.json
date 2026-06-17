@@ -2,7 +2,7 @@
   "name": "作业打卡",
   "short_name": "作业打卡",
   "description": "小学生作业计划及完成打卡",
-  "start_url": "./",
+  "start_url": "/my-pwa-app/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#FFF8E7",
@@ -10,13 +10,13 @@
   "lang": "zh-CN",
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "/my-pwa-app/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "/my-pwa-app/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
