@@ -276,10 +276,16 @@
   <script src="js/app.js"></script>
 
   <!-- Service Worker 注册 -->
-  <script>
-    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-      navigator.serviceWorker.register('/my-pwa-app/sw.js').catch(function() {});
-    }
-  </script>
+<script>
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    navigator.serviceWorker.register('sw.js')
+      .then(function(reg) {
+        console.log('✅ Service Worker 注册成功');
+      })
+      .catch(function(err) {
+        console.log('❌ Service Worker 注册失败:', err);
+      });
+  }
+</script>
 </body>
 </html>
