@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="作业打卡">
+  <meta name="theme-color" content="#FF9500">
+  <meta name="description" content="小学生作业计划及完成打卡">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <title>作业打卡</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- 头部 -->
+  <header class="app-header">
+    <div class="header-left">
+      <h1 class="app-title">📚 作业打卡</h1>
+    </div>
+    <div class="header-right">
+      <span class="star-badge" id="headerStars">⭐ 0</span>
+    </div>
+  </header>
+
+  <!-- 主内容区 -->
+  <main class="app-main" id="appMain">
+
+    <!-- 标签页 1：今天 -->
+    <section class="panel active" id="panelToday">
+      <div class="week-indicator" id="weekIndicator"></div>
+      <div class="weekly-progress" id="weeklyProgress"></div>
+      <div class="section-header">
+        <h2>📋 待完成</h2>
+        <span class="count-badge" id="pendingCount">0</span>
+      </div>
+      <div class="task-list" id="pendingTasks"></div>
+      <div class="section-header">
+        <h2>✅ 已完成</h2>
+        <span class="count-badge done" id="doneCount">0</span>
+      </div>
+      <div class="task-list" id="doneTasks"></div>
+      <button class="fab" id="btnAddTask" aria-label="添加新作业">＋</button>
+    </section>
+
+    <!-- 标签页 2：日历 -->
+    <section class="panel" id="panelCalendar">
+      <div class="calendar-header">
+        <button class="btn-icon" id="btnPrevMonth">◀</button>
+        <h2 id="calendarTitle"></h2>
+        <button class="btn-icon" id="btnNextMonth">▶</button>
+      </div>
+      <div class="calendar-weekdays">
+        <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
+      <div class="calendar-legend">
+        <span>🔴 有未完成</span>
+        <span>🟢 全部完成</span>
+        <span>⚪ 无作业</span>
+      </div>
+      <div class="date-detail" id="dateDetail"></div>
+    </section>
+
+    <!-- 标签页 3：奖励 -->
+    <section class="panel" id="panelRewards">
+      <div class="stars-jar-container">
+        <h2>⭐ 星星罐</h2>
+        <div class="stars-jar" id="starsJar"></div>
+        <p class="stars-total" id="starsTotal">共 0 颗星星</p>
+      </div>
+      <div class="badges-section">
+        <h2>🏆 徽章收藏</h2>
+        <div class="badge-grid" id="badgeGrid"></div>
+      </div>
+      <div class="star-history-section">
+        <h2>📜 星星记录</h2>
+        <div class="star-history-list" id="starHistoryList"></div>
+      </div>
+    </section>
+
+    <!-- 标签页 4：错题本 -->
+    <section class="panel" id="panelErrorbook">
+      <div class="filter-bar">
+        <select id="ebSubjectFilter" class="filter-select">
+          <option value="">全部学科</option>
+        </select>
+        <input type="text" id="ebTagFilter" class="filter-input" placeholder="搜索标签...">
+      </div>
+      <div class="error-list" id="errorList"></div>
+      <button class="fab" id="btnAddError" aria-label="添加错题">＋</button>
+    </section>
+
+    <!-- 标签页 5：设置 -->
+    <section class="panel" id="panelSettings">
+      <div class="settings-section">
+        <h2>📖 学科管理</h2>
+        <div class="subject-list" id="subjectList"></div>
+        <button class="btn-text" id="btnAddSubject">+ 添加新学科</button>
+      </div>
+      <div class="settings-section">
+        <h2>📊 周次总结</h2>
+        <button class="btn-block" id="btnWeeklySummary">查看历史周总结</button>
+      </div>
+      <div class="settings-section">
+        <h2>💾 数据管理</h2>
+        <button class="btn-block" id="btnExportData">📤 导出数据</button>
+        <button class="btn-block" id="btnImportData">📥 导入数据</button>
+        <button class="btn-block danger" id="btnClearData">🗑️ 清除所有数据</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 底部标签栏 -->
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="panelToday">
+      <span class="tab-icon">🏠</span>
+      <span class="tab-label">今天</span>
+    </button>
+    <button class="tab-btn" data-tab="panelCalendar">
+      <span class="tab-icon">📅</span>
+      <span class="tab-label">日历</span>
+    </button>
+    <button class="tab-btn" data-tab="panelRewards">
+      <span class="tab-icon">⭐</span>
+      <span class="tab-label">奖励</span>
+    </button>
+    <button class="tab-btn" data-tab="panelErrorbook">
+      <span class="tab-icon">📔</span>
+      <span class="tab-label">错题</span>
+    </button>
+    <button class="tab-btn" data-tab="panelSettings">
+      <span class="tab-icon">⚙️</span>
+      <span class="tab-label">设置</span>
+    </button>
+  </nav>
+
+  <!-- 模态框容器 -->
+  <!-- 作业表单模态框 -->
+  <div class="modal-overlay" id="modalTask">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTaskTitle">添加作业</h3>
+        <button class="btn-close" data-close="modalTask">✕</button>
+      </div>
+      <form id="formTask" class="modal-body">
+        <input type="hidden" id="taskId">
+        <label>学科</label>
+        <select id="taskSubject" required></select>
+        <label>作业内容</label>
+        <input type="text" id="taskTitle" placeholder="例如：背诵课文第三课" required>
+        <label>备注</label>
+        <input type="text" id="taskNote" placeholder="例如：需要家长签字">
+        <label>截止日期</label>
+        <input type="date" id="taskDueDate" required>
+        <label>照片</label>
+        <div class="photo-area" id="taskPhotos"></div>
+        <button type="button" class="btn-photo" id="btnTaskPhoto">📷 拍照</button>
+        <button type="submit" class="btn-primary">保存</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 错题表单模态框 -->
+  <div class="modal-overlay" id="modalError">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalErrorTitle">添加错题</h3>
+        <button class="btn-close" data-close="modalError">✕</button>
+      </div>
+      <form id="formError" class="modal-body">
+        <input type="hidden" id="errorId">
+        <label>学科</label>
+        <select id="errorSubject" required></select>
+        <label>错题标题</label>
+        <input type="text" id="errorTitle" placeholder="例如：乘法口诀表记错" required>
+        <label>难点 / 要点</label>
+        <textarea id="errorDifficulty" rows="2" placeholder="什么地方容易出错？为什么难？"></textarea>
+        <label>解法 / 正确思路</label>
+        <textarea id="errorSolution" rows="2" placeholder="正确的解法是什么？怎么记住？"></textarea>
+        <label>标签（用逗号分隔）</label>
+        <input type="text" id="errorTags" placeholder="例如：乘法, 口诀">
+        <label>照片</label>
+        <div class="photo-area" id="errorPhotos"></div>
+        <button type="button" class="btn-photo" id="btnErrorPhoto">📷 拍照</button>
+        <button type="submit" class="btn-primary">保存</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 学科表单模态框 -->
+  <div class="modal-overlay" id="modalSubject">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalSubjectTitle">添加学科</h3>
+        <button class="btn-close" data-close="modalSubject">✕</button>
+      </div>
+      <form id="formSubject" class="modal-body">
+        <input type="hidden" id="subjectId">
+        <label>学科名称</label>
+        <input type="text" id="subjectName" placeholder="例如：科学" required>
+        <label>图标</label>
+        <div class="icon-picker" id="iconPicker"></div>
+        <label>颜色</label>
+        <div class="color-picker" id="colorPicker"></div>
+        <button type="submit" class="btn-primary">保存</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 周总结模态框 -->
+  <div class="modal-overlay" id="modalWeekly">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>📊 周次总结</h3>
+        <button class="btn-close" data-close="modalWeekly">✕</button>
+      </div>
+      <div class="modal-body" id="weeklySummaryContent"></div>
+    </div>
+  </div>
+
+  <!-- 照片查看模态框 -->
+  <div class="modal-overlay" id="modalPhoto">
+    <div class="modal-content photo-viewer">
+      <div class="modal-header">
+        <h3>📷 照片</h3>
+        <button class="btn-close" data-close="modalPhoto">✕</button>
+      </div>
+      <div class="modal-body">
+        <img id="photoViewer" src="" alt="作业照片" style="width:100%; border-radius:12px;">
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 容器 -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- 庆祝覆盖层 -->
+  <div class="celebration-overlay" id="celebrationOverlay">
+    <div class="celebration-content">
+      <div class="celebration-emoji">🎉</div>
+      <div class="celebration-text" id="celebrationText"></div>
+      <div class="celebration-sub" id="celebrationSub"></div>
+    </div>
+  </div>
+
+  <!-- 隐藏的文件选择器（拍照用） -->
+  <input type="file" accept="image/*" capture="environment" id="photoInput" style="display:none;">
+
+  <!-- 确认对话框 -->
+  <div class="modal-overlay" id="modalConfirm">
+    <div class="modal-content modal-small">
+      <div class="modal-body">
+        <p id="confirmMessage"></p>
+        <div class="confirm-buttons">
+          <button class="btn-text" id="confirmNo">取消</button>
+          <button class="btn-primary danger" id="confirmYes">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/subjects.js"></script>
+  <script src="js/tasks.js"></script>
+  <script src="js/checkin.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/rewards.js"></script>
+  <script src="js/errorbook.js"></script>
+  <script src="js/weekly.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker 注册 -->
+  <script>
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      navigator.serviceWorker.register('sw.js').catch(function() {});
+    }
+  </script>
+</body>
+</html>
